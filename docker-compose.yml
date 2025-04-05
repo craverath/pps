@@ -26,4 +26,3 @@ services:
       - MYSQL_DATABASE=pps
     ports:
       - "3306:3306"
-    command: --default-authentication-plugin=mysql_native_password
