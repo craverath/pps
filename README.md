@@ -122,7 +122,6 @@ POST /api/transfer
 - Lojistas não podem enviar dinheiro
 - O pagador deve ter saldo suficiente
 - Antes de completar a transferência, o sistema consulta um serviço externo de autorização
-- A operação é atômica e transacional (realiza rollback em caso de falha)
 - Após a transferência, o sistema envia uma notificação ao recebedor
 
 ## Testes
@@ -133,20 +132,4 @@ Para executar os testes:
 php artisan test
 ```
 
-## Documentação da API
 
-A documentação completa da API está disponível em:
-- [Postman Collection](docs/postman-collection.json)
-- [Swagger/OpenAPI](docs/swagger.yaml)
-
-## Contribuindo
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
