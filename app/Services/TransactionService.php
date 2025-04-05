@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\TransferDTO;
-use App\Interfaces\{ITransactionRepository, IUserRepository, IWalletRepository};
+use App\Interfaces\{ITransactionRepository, IUserRepository, IWalletRepository, INotificationLogRepository};
 use App\Exceptions\TransactionException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -13,7 +13,8 @@ class TransactionService
     public function __construct(
         private readonly ITransactionRepository $transactionRepository,
         private readonly IUserRepository $userRepository,
-        private readonly IWalletRepository $walletRepository
+        private readonly IWalletRepository $walletRepository,
+        private readonly INotificationLogRepository $notificationLogRepository
     ) {}
 
     public function transfer(TransferDTO $transferDTO): array
@@ -59,7 +60,7 @@ class TransactionService
                 $this->transactionRepository->updateStatus($transaction, 'autorizada');
 
                 // Notifica o recebedor (fora da transação pois não afeta a integridade dos dados)
-                $this->notifyUser($payee);
+                $this->notifyUser($payee, $transaction);
 
                 return [
                     'message' => 'Transferência realizada com sucesso',
@@ -74,7 +75,7 @@ class TransactionService
 
     private function authorizeTransaction(): bool
     {
-        if (app()->environment('testing')) {
+        if (app()->environment('testing') || app()->environment('local')) {
             return true;
         }
 
@@ -93,16 +94,56 @@ class TransactionService
         }
     }
 
-    private function notifyUser($user): void
+    private function notifyUser($user, $transaction): void
     {
+        $requestPayload = [
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'transaction_id' => $transaction->id
+        ];
+
         try {
-            Http::post('https://util.devi.tools/api/v1/notify', [
+            $response = Http::post('https://util.devi.tools/api/v1/notify', $requestPayload);
+            
+            $logData = [
+                'transaction_id' => $transaction->id,
                 'user_id' => $user->id,
-                'email' => $user->email
-            ]);
+                'status' => $response->successful() ? 'success' : 'error',
+                'error_message' => !$response->successful() ? $response->body() : null,
+                'request_payload' => json_encode($requestPayload),
+                'response_payload' => $response->json() ? json_encode($response->json()) : null
+            ];
+
+            // Registra o log da notificação
+            $this->notificationLogRepository->create($logData);
+
+            if (!$response->successful()) {
+                \Log::warning('Notificação falhou', [
+                    'user_id' => $user->id,
+                    'transaction_id' => $transaction->id,
+                    'response' => $response->body()
+                ]);
+            }
+
         } catch (\Exception $e) {
-            // Log error but don't stop the process
-            \Log::error('Falha ao notificar usuário: ' . $e->getMessage());
+            $logData = [
+                'transaction_id' => $transaction->id,
+                'user_id' => $user->id,
+                'status' => 'error',
+                'error_message' => $e->getMessage(),
+                'request_payload' => json_encode($requestPayload),
+                'response_payload' => null
+            ];
+
+            // Registra o log da falha
+            $this->notificationLogRepository->create($logData);
+
+            \Log::error('Falha ao notificar usuário', [
+                'user_id' => $user->id,
+                'transaction_id' => $transaction->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
     }
 } 
