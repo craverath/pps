@@ -11,7 +11,8 @@ class TransferController extends Controller
 {
     public function __construct(
         private readonly TransactionService $transactionService
-    ) {}
+    ) {
+    }
 
     public function transfer(Request $request)
     {
@@ -32,7 +33,7 @@ class TransferController extends Controller
         try {
             $transferDTO = TransferDTO::fromRequest($request->all());
             $result = $this->transactionService->transfer($transferDTO);
-            
+
             return response()->json($result);
         } catch (\Exception $e) {
             return response()->json([
@@ -41,4 +42,4 @@ class TransferController extends Controller
             ], 422);
         }
     }
-} 
+}

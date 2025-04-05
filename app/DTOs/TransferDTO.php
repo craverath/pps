@@ -8,7 +8,8 @@ class TransferDTO
         public readonly float $value,
         public readonly int $payer,
         public readonly int $payee
-    ) {}
+    ) {
+    }
 
     public static function fromRequest(array $data): self
     {

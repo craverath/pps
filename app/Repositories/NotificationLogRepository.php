@@ -50,4 +50,4 @@ class NotificationLogRepository implements INotificationLogRepository
             throw $e;
         }
     }
-} 
+}

@@ -11,4 +11,4 @@ interface ITransactionRepository
     public function updateStatus(Transaction $transaction, string $status): bool;
     public function findByPayerId(int $payerId): array;
     public function findByPayeeId(int $payeeId): array;
-} 
+}

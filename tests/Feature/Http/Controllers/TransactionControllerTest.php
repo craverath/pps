@@ -56,7 +56,7 @@ class TransactionControllerTest extends TestCase
         ]);
     }
 
-    public function test_transfer_between_common_and_merchant_successfully()
+    public function testTransferBetweenCommonAndMerchantSuccessfully()
     {
         // Arrange
         $transferData = [
@@ -98,7 +98,7 @@ class TransactionControllerTest extends TestCase
         ]);
     }
 
-    public function test_transfer_between_common_users_successfully()
+    public function testTransferBetweenCommonUsersSuccessfully()
     {
         // Arrange
         $transferData = [
@@ -134,7 +134,7 @@ class TransactionControllerTest extends TestCase
         ]);
     }
 
-    public function test_transfer_denied_due_to_insufficient_balance()
+    public function testTransferDeniedDueToInsufficientBalance()
     {
         // Arrange
         $transferData = [
@@ -165,7 +165,7 @@ class TransactionControllerTest extends TestCase
         ]);
     }
 
-    public function test_transfer_denied_due_to_authorization_failure()
+    public function testTransferDeniedDueToAuthorizationFailure()
     {
         // Arrange
         $transferData = [
@@ -201,7 +201,7 @@ class TransactionControllerTest extends TestCase
         ]);
     }
 
-    public function test_notification_failure_and_retry()
+    public function testNotificationFailureAndRetry()
     {
         // Arrange
         $transferData = [
@@ -250,7 +250,7 @@ class TransactionControllerTest extends TestCase
         ]);
     }
 
-    public function test_concurrent_transfers()
+    public function testConcurrentTransfers()
     {
         // Arrange
         $transferData = [
@@ -291,4 +291,4 @@ class TransactionControllerTest extends TestCase
             'saldo' => 500.00 // 0 + (5 * 100)
         ]);
     }
-} 
+}

@@ -46,7 +46,7 @@ class TransactionServiceTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_transfer_successfully()
+    public function testTransferSuccessfully()
     {
         // Configura o ambiente como teste para autorizar automaticamente
         app()['env'] = 'testing';
@@ -130,7 +130,7 @@ class TransactionServiceTest extends TestCase
         $this->assertEquals(1, $result['transaction_id']);
     }
 
-    public function test_throws_exception_when_user_not_found()
+    public function testThrowsExceptionWhenUserNotFound()
     {
         // Arrange
         $transferDTO = new TransferDTO(50.00, 1, 2);
@@ -157,7 +157,7 @@ class TransactionServiceTest extends TestCase
         }
     }
 
-    public function test_throws_exception_when_payer_is_lojista()
+    public function testThrowsExceptionWhenPayerIsLojista()
     {
         // Arrange
         $payer = new User([
@@ -187,7 +187,7 @@ class TransactionServiceTest extends TestCase
         $this->transactionService->transfer($transferDTO);
     }
 
-    public function test_throws_exception_when_insufficient_balance()
+    public function testThrowsExceptionWhenInsufficientBalance()
     {
         // Arrange
         $payerWallet = Mockery::mock(Wallet::class);
@@ -241,7 +241,7 @@ class TransactionServiceTest extends TestCase
         $this->transactionService->transfer($transferDTO);
     }
 
-    public function test_throws_exception_when_transaction_not_authorized()
+    public function testThrowsExceptionWhenTransactionNotAuthorized()
     {
         // Arrange
         $payerWallet = Mockery::mock(Wallet::class);
@@ -311,4 +311,4 @@ class TransactionServiceTest extends TestCase
         // Act
         $this->transactionService->transfer($transferDTO);
     }
-} 
+}

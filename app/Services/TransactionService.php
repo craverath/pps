@@ -15,7 +15,8 @@ class TransactionService
         private readonly IUserRepository $userRepository,
         private readonly IWalletRepository $walletRepository,
         private readonly INotificationLogRepository $notificationLogRepository
-    ) {}
+    ) {
+    }
 
     public function transfer(TransferDTO $transferDTO): array
     {
@@ -87,7 +88,7 @@ class TransactionService
 
         try {
             $response = Http::get('https://util.devi.tools/api/v2/authorize');
-            
+
             if (!$response->successful()) {
                 return false;
             }
@@ -115,7 +116,7 @@ class TransactionService
         while ($retryCount < $maxRetries && !$success) {
             try {
                 $response = Http::post('https://util.devi.tools/api/v1/notify', $requestPayload);
-                
+
                 $logData = [
                     'transaction_id' => $transaction->id,
                     'user_id' => $user->id,
@@ -162,4 +163,4 @@ class TransactionService
             $retryCount++;
         }
     }
-} 
+}

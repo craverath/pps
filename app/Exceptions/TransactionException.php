@@ -11,4 +11,4 @@ class TransactionException extends \Exception
             'message' => $this->getMessage()
         ], 422);
     }
-} 
+}

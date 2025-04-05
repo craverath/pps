@@ -12,7 +12,8 @@ class CreateUserDTO
         public readonly string $email,
         public readonly string $password,
         public readonly UserType $tipoUsuario = UserType::COMUM
-    ) {}
+    ) {
+    }
 
     public static function fromRequest(array $data): self
     {
@@ -24,4 +25,4 @@ class CreateUserDTO
             tipoUsuario: UserType::from($data['tipo_usuario'] ?? 'comum')
         );
     }
-} 
+}

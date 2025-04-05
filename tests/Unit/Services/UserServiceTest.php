@@ -23,13 +23,13 @@ class UserServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->userRepository = Mockery::mock(IUserRepository::class);
         $this->walletRepository = Mockery::mock(IWalletRepository::class);
         $this->userService = new UserService($this->userRepository, $this->walletRepository);
     }
 
-    public function test_create_user_successfully()
+    public function testCreateUserSuccessfully()
     {
         // Arrange
         $userDTO = new CreateUserDTO(
@@ -86,7 +86,7 @@ class UserServiceTest extends TestCase
         $this->assertEquals(0.00, $result['saldo_inicial']);
     }
 
-    public function test_throws_exception_when_cpf_cnpj_already_exists()
+    public function testThrowsExceptionWhenCpfCnpjAlreadyExists()
     {
         // Arrange
         $userDTO = new CreateUserDTO(
@@ -112,7 +112,7 @@ class UserServiceTest extends TestCase
         $this->userService->createUser($userDTO);
     }
 
-    public function test_throws_exception_when_email_already_exists()
+    public function testThrowsExceptionWhenEmailAlreadyExists()
     {
         // Arrange
         $userDTO = new CreateUserDTO(
@@ -142,4 +142,4 @@ class UserServiceTest extends TestCase
         // Act
         $this->userService->createUser($userDTO);
     }
-} 
+}

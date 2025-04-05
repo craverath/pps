@@ -19,12 +19,12 @@ class NotificationLogRepositoryTest extends TestCase
         $this->notificationLogRepository = new NotificationLogRepository();
     }
 
-    public function test_create_notification_log_successfully()
+    public function testCreateNotificationLogSuccessfully()
     {
         // Arrange
         $user = User::factory()->create();
         $transaction = Transaction::factory()->create();
-        
+
         $data = [
             'transaction_id' => $transaction->id,
             'user_id' => $user->id,
@@ -52,12 +52,12 @@ class NotificationLogRepositoryTest extends TestCase
         ]);
     }
 
-    public function test_create_notification_log_with_error()
+    public function testCreateNotificationLogWithError()
     {
         // Arrange
         $user = User::factory()->create();
         $transaction = Transaction::factory()->create();
-        
+
         $data = [
             'transaction_id' => $transaction->id,
             'user_id' => $user->id,
@@ -86,12 +86,12 @@ class NotificationLogRepositoryTest extends TestCase
         ]);
     }
 
-    public function test_create_notification_log_with_invalid_json()
+    public function testCreateNotificationLogWithInvalidJson()
     {
         // Arrange
         $user = User::factory()->create();
         $transaction = Transaction::factory()->create();
-        
+
         $data = [
             'transaction_id' => $transaction->id,
             'user_id' => $user->id,
@@ -118,4 +118,4 @@ class NotificationLogRepositoryTest extends TestCase
             'status' => 'success'
         ]);
     }
-} 
+}

@@ -11,4 +11,4 @@ class UserException extends \Exception
             'message' => $this->getMessage()
         ], 422);
     }
-} 
+}

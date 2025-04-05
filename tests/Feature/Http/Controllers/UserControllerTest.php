@@ -10,7 +10,7 @@ class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_create_user()
+    public function testCanCreateUser()
     {
         // Arrange
         $userData = [
@@ -48,7 +48,7 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    public function test_cannot_create_user_with_duplicate_cpf_cnpj()
+    public function testCannotCreateUserWithDuplicateCpfCnpj()
     {
         // Arrange
         User::factory()->create([
@@ -128,4 +128,4 @@ class UserControllerTest extends TestCase
                 ]
             ]);
     }
-} 
+}

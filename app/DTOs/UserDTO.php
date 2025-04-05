@@ -10,7 +10,8 @@ class UserDTO
         public readonly string $email,
         public readonly string $password,
         public readonly string $tipoUsuario = 'comum'
-    ) {}
+    ) {
+    }
 
     public static function fromRequest(array $data): self
     {
@@ -22,4 +23,4 @@ class UserDTO
             tipoUsuario: $data['tipo_usuario'] ?? 'comum'
         );
     }
-} 
+}

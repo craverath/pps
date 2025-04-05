@@ -19,7 +19,7 @@ class WalletRepositoryTest extends TestCase
         $this->walletRepository = new WalletRepository();
     }
 
-    public function test_find_by_user_id_successfully()
+    public function testFindByUserIdSuccessfully()
     {
         // Arrange
         $user = User::factory()->create();
@@ -37,7 +37,7 @@ class WalletRepositoryTest extends TestCase
         $this->assertEquals(100.00, $result->saldo);
     }
 
-    public function test_find_by_user_id_returns_null_when_not_found()
+    public function testFindByUserIdReturnsNullWhenNotFound()
     {
         // Act
         $result = $this->walletRepository->findByUserId(999);
@@ -46,7 +46,7 @@ class WalletRepositoryTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function test_create_wallet_successfully()
+    public function testCreateWalletSuccessfully()
     {
         // Arrange
         $user = User::factory()->create();
@@ -65,7 +65,7 @@ class WalletRepositoryTest extends TestCase
         $this->assertDatabaseHas('wallets', $data);
     }
 
-    public function test_update_balance_successfully()
+    public function testUpdateBalanceSuccessfully()
     {
         // Arrange
         $user = User::factory()->create();
@@ -85,7 +85,7 @@ class WalletRepositoryTest extends TestCase
         ]);
     }
 
-    public function test_lock_for_update_successfully()
+    public function testLockForUpdateSuccessfully()
     {
         // Arrange
         $user = User::factory()->create();
@@ -103,7 +103,7 @@ class WalletRepositoryTest extends TestCase
         $this->assertEquals(100.00, $result->saldo);
     }
 
-    public function test_lock_for_update_returns_null_when_not_found()
+    public function testLockForUpdateReturnsNullWhenNotFound()
     {
         // Act
         $result = $this->walletRepository->lockForUpdate(999);
@@ -111,4 +111,4 @@ class WalletRepositoryTest extends TestCase
         // Assert
         $this->assertNull($result);
     }
-} 
+}

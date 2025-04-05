@@ -11,4 +11,4 @@ enum UserType: string
     {
         return $this === self::LOJISTA;
     }
-} 
+}

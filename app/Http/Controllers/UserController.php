@@ -11,7 +11,8 @@ class UserController extends Controller
 {
     public function __construct(
         private readonly UserService $userService
-    ) {}
+    ) {
+    }
 
     public function store(Request $request)
     {
@@ -34,7 +35,7 @@ class UserController extends Controller
         try {
             $userDTO = CreateUserDTO::fromRequest($request->all());
             $user = $this->userService->createUser($userDTO);
-            
+
             return response()->json($user, 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -43,4 +44,4 @@ class UserController extends Controller
             ], 422);
         }
     }
-} 
+}

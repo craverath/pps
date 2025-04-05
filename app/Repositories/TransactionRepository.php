@@ -31,4 +31,4 @@ class TransactionRepository implements ITransactionRepository
     {
         return Transaction::where('payee_id', $payeeId)->get()->all();
     }
-} 
+}

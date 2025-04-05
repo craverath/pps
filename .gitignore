@@ -17,3 +17,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# PHP Code Quality Tools
+.php-cs-fixer.cache
+.phpstan.result.cache
+.php_cs.cache
+.php_cs.dist.cache

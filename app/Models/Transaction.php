@@ -47,4 +47,4 @@ class Transaction extends Model
         $this->status = 'estornada';
         $this->save();
     }
-} 
+}

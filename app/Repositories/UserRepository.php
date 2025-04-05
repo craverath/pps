@@ -36,4 +36,4 @@ class UserRepository implements IUserRepository
     {
         return User::destroy($id) > 0;
     }
-} 
+}

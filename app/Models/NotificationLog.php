@@ -29,4 +29,4 @@ class NotificationLog extends Model
     {
         return $this->belongsTo(User::class);
     }
-} 
+}

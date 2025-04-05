@@ -30,4 +30,4 @@ class Wallet extends Model
         $this->saldo -= $valor;
         $this->save();
     }
-} 
+}

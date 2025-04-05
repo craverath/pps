@@ -20,4 +20,4 @@ class TestDatabaseConnection extends Command
             $this->error('❌ Erro ao conectar com o banco de dados: ' . $e->getMessage());
         }
     }
-} 
+}

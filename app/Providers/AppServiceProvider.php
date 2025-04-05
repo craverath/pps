@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IWalletRepository::class, WalletRepository::class);
         $this->app->bind(ITransactionRepository::class, TransactionRepository::class);
         $this->app->bind(INotificationLogRepository::class, NotificationLogRepository::class);
-        
+
         $this->app->singleton(UserService::class, function ($app) {
             return new UserService(
                 $app->make(IUserRepository::class),

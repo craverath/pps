@@ -10,4 +10,4 @@ interface IWalletRepository
     public function create(array $data): Wallet;
     public function updateBalance(Wallet $wallet, float $newBalance): bool;
     public function lockForUpdate(int $walletId): ?Wallet;
-} 
+}

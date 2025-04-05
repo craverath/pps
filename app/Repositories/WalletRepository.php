@@ -31,4 +31,4 @@ class WalletRepository implements IWalletRepository
                 ->first();
         });
     }
-} 
+}

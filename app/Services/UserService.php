@@ -13,7 +13,8 @@ class UserService
     public function __construct(
         private readonly IUserRepository $userRepository,
         private readonly IWalletRepository $walletRepository
-    ) {}
+    ) {
+    }
 
     public function createUser(CreateUserDTO $userDTO): array
     {
@@ -53,4 +54,4 @@ class UserService
             ];
         });
     }
-} 
+}
