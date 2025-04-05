@@ -23,6 +23,7 @@ class UserControllerTest extends TestCase
 
         // Act
         $response = $this->postJson('/api/users', $userData);
+        $responseData = $response->json();
 
         // Assert
         $response->assertStatus(201)
@@ -42,7 +43,7 @@ class UserControllerTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('wallets', [
-            'user_id' => 1,
+            'user_id' => $responseData['id'],
             'saldo' => 0.00
         ]);
     }
