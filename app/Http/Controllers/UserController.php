@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nome_completo' => 'required|string|max:255',
-            'cpf_cnpj' => 'required|string|max:14',
+            'cpf_cnpj' => 'required|string|min:11|max:14',
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6',
             'tipo_usuario' => 'required|string|in:comum,lojista'
