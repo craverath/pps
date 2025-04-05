@@ -39,12 +39,7 @@ class TransactionService
                     throw new TransactionException('Saldo insuficiente');
                 }
 
-                // Autoriza a transação
-                if (!$this->authorizeTransaction()) {
-                    throw new TransactionException('Transação não autorizada');
-                }
-
-                // Cria a transação
+                // Cria a transação com status pendente
                 $transaction = $this->transactionRepository->create([
                     'valor' => $transferDTO->value,
                     'payer_id' => $transferDTO->payer,
@@ -52,12 +47,18 @@ class TransactionService
                     'status' => 'pendente'
                 ]);
 
+                // Autoriza a transação
+                if (!$this->authorizeTransaction()) {
+                    $this->transactionRepository->updateStatus($transaction, 'rejeitada');
+                    throw new TransactionException('Transação não autorizada');
+                }
+
+                // Atualiza status para autorizada
+                $this->transactionRepository->updateStatus($transaction, 'autorizada');
+
                 // Atualiza os saldos
                 $this->walletRepository->updateBalance($payerWallet, $payerWallet->saldo - $transferDTO->value);
                 $this->walletRepository->updateBalance($payee->wallet, $payee->wallet->saldo + $transferDTO->value);
-
-                // Atualiza status da transação
-                $this->transactionRepository->updateStatus($transaction, 'autorizada');
 
                 // Notifica o recebedor (fora da transação pois não afeta a integridade dos dados)
                 $this->notifyUser($payee, $transaction);
