@@ -21,16 +21,20 @@ class TransactionService
     {
         return DB::transaction(function () use ($transferDTO) {
             try {
-                // Busca e valida usuários
+                // Busca e valida o pagador
                 $payer = $this->userRepository->findById($transferDTO->payer);
-                $payee = $this->userRepository->findById($transferDTO->payee);
-
-                if (!$payer || !$payee) {
+                if (!$payer) {
                     throw new TransactionException('Usuário não encontrado');
                 }
 
                 if ($payer->isLojista()) {
                     throw new TransactionException('Lojistas não podem realizar transferências');
+                }
+
+                // Busca e valida o recebedor
+                $payee = $this->userRepository->findById($transferDTO->payee);
+                if (!$payee) {
+                    throw new TransactionException('Usuário não encontrado');
                 }
 
                 // Bloqueia e verifica saldo da carteira do pagador
