@@ -18,9 +18,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nome_completo',
+        'cpf_cnpj',
         'email',
         'password',
+        'tipo_usuario',
     ];
 
     /**
@@ -42,4 +44,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
+    public function transactionsAsPayer()
+    {
+        return $this->hasMany(Transaction::class, 'payer_id');
+    }
+
+    public function transactionsAsPayee()
+    {
+        return $this->hasMany(Transaction::class, 'payee_id');
+    }
+
+    public function isLojista()
+    {
+        return $this->tipo_usuario === 'lojista';
+    }
 }
