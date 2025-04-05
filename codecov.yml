@@ -1,0 +1,23 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 1%
+    patch:
+      default:
+        target: 80%
+        threshold: 1%
+
+ignore:
+  - "tests/*"
+  - "vendor/*"
+  - "storage/*"
+  - "bootstrap/*"
+  - "config/*"
+  - "database/*"
+  - "public/*"
+  - "resources/*"
+  - "routes/*"
+  - ".github/*"
+  - ".git/*" 
