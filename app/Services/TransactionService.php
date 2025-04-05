@@ -80,8 +80,9 @@ class TransactionService
 
     private function authorizeTransaction(): bool
     {
-        if (app()->environment('testing') || app()->environment('local')) {
-            return true;
+        if (app()->environment('testing')) {
+            $response = Http::get('https://util.devi.tools/api/v2/authorize');
+            return $response->successful() && $response->json()['message'] === 'Autorizado';
         }
 
         try {
@@ -107,48 +108,58 @@ class TransactionService
             'transaction_id' => $transaction->id
         ];
 
-        try {
-            $response = Http::post('https://util.devi.tools/api/v1/notify', $requestPayload);
-            
-            $logData = [
-                'transaction_id' => $transaction->id,
-                'user_id' => $user->id,
-                'status' => $response->successful() ? 'success' : 'error',
-                'error_message' => !$response->successful() ? $response->body() : null,
-                'request_payload' => json_encode($requestPayload),
-                'response_payload' => $response->json() ? json_encode($response->json()) : null
-            ];
+        $maxRetries = 3;
+        $retryCount = 0;
+        $success = false;
 
-            // Registra o log da notificação
-            $this->notificationLogRepository->create($logData);
+        while ($retryCount < $maxRetries && !$success) {
+            try {
+                $response = Http::post('https://util.devi.tools/api/v1/notify', $requestPayload);
+                
+                $logData = [
+                    'transaction_id' => $transaction->id,
+                    'user_id' => $user->id,
+                    'status' => $response->successful() ? 'success' : 'error',
+                    'error_message' => !$response->successful() ? $response->body() : null,
+                    'request_payload' => json_encode($requestPayload),
+                    'response_payload' => $response->json() ? json_encode($response->json()) : null
+                ];
 
-            if (!$response->successful()) {
-                \Log::warning('Notificação falhou', [
+                // Registra o log da notificação
+                $this->notificationLogRepository->create($logData);
+
+                if ($response->successful()) {
+                    $success = true;
+                } else {
+                    \Log::warning('Notificação falhou', [
+                        'user_id' => $user->id,
+                        'transaction_id' => $transaction->id,
+                        'response' => $response->body(),
+                        'retry_count' => $retryCount + 1
+                    ]);
+                }
+            } catch (\Exception $e) {
+                $logData = [
+                    'transaction_id' => $transaction->id,
+                    'user_id' => $user->id,
+                    'status' => 'error',
+                    'error_message' => $e->getMessage(),
+                    'request_payload' => json_encode($requestPayload),
+                    'response_payload' => null
+                ];
+
+                // Registra o log da falha
+                $this->notificationLogRepository->create($logData);
+
+                \Log::error('Falha ao notificar usuário', [
                     'user_id' => $user->id,
                     'transaction_id' => $transaction->id,
-                    'response' => $response->body()
+                    'error' => $e->getMessage(),
+                    'retry_count' => $retryCount + 1
                 ]);
             }
 
-        } catch (\Exception $e) {
-            $logData = [
-                'transaction_id' => $transaction->id,
-                'user_id' => $user->id,
-                'status' => 'error',
-                'error_message' => $e->getMessage(),
-                'request_payload' => json_encode($requestPayload),
-                'response_payload' => null
-            ];
-
-            // Registra o log da falha
-            $this->notificationLogRepository->create($logData);
-
-            \Log::error('Falha ao notificar usuário', [
-                'user_id' => $user->id,
-                'transaction_id' => $transaction->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
+            $retryCount++;
         }
     }
 } 
