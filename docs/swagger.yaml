@@ -1,0 +1,212 @@
+openapi: 3.0.0
+info:
+  title: API de Pagamentos Simplificada
+  description: API RESTful para uma plataforma de pagamentos simplificada que permite depósitos e transferências de dinheiro entre usuários
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Servidor de desenvolvimento
+paths:
+  /users:
+    post:
+      summary: Criar usuário
+      description: Cria um novo usuário com uma carteira associada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nome_completo
+                - cpf_cnpj
+                - email
+                - password
+                - tipo_usuario
+              properties:
+                nome_completo:
+                  type: string
+                  description: Nome completo do usuário
+                cpf_cnpj:
+                  type: string
+                  description: CPF ou CNPJ do usuário
+                email:
+                  type: string
+                  format: email
+                  description: Email do usuário
+                password:
+                  type: string
+                  format: password
+                  description: Senha do usuário
+                tipo_usuario:
+                  type: string
+                  enum: [comum, lojista]
+                  description: Tipo do usuário
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do usuário
+                  nome_completo:
+                    type: string
+                    description: Nome completo do usuário
+                  cpf_cnpj:
+                    type: string
+                    description: CPF ou CNPJ do usuário
+                  email:
+                    type: string
+                    format: email
+                    description: Email do usuário
+                  tipo_usuario:
+                    type: string
+                    enum: [comum, lojista]
+                    description: Tipo do usuário
+                  saldo_inicial:
+                    type: number
+                    format: float
+                    description: Saldo inicial da carteira
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: Data de criação do usuário
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    description: Indica se houve erro
+                  message:
+                    type: string
+                    description: Mensagem de erro
+                  errors:
+                    type: object
+                    description: Detalhes dos erros de validação
+  /transfer:
+    post:
+      summary: Realizar transferência
+      description: Realiza uma transferência de dinheiro entre usuários
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - value
+                - payer
+                - payee
+              properties:
+                value:
+                  type: number
+                  format: float
+                  description: Valor da transferência
+                payer:
+                  type: integer
+                  description: ID do usuário pagador
+                payee:
+                  type: integer
+                  description: ID do usuário recebedor
+      responses:
+        '200':
+          description: Transferência realizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensagem de sucesso
+                  transaction_id:
+                    type: integer
+                    description: ID da transação
+        '422':
+          description: Erro na transferência
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    description: Indica se houve erro
+                  message:
+                    type: string
+                    description: Mensagem de erro
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do usuário
+        nome_completo:
+          type: string
+          description: Nome completo do usuário
+        cpf_cnpj:
+          type: string
+          description: CPF ou CNPJ do usuário
+        email:
+          type: string
+          format: email
+          description: Email do usuário
+        tipo_usuario:
+          type: string
+          enum: [comum, lojista]
+          description: Tipo do usuário
+        created_at:
+          type: string
+          format: date-time
+          description: Data de criação do usuário
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID da transação
+        valor:
+          type: number
+          format: float
+          description: Valor da transação
+        payer_id:
+          type: integer
+          description: ID do usuário pagador
+        payee_id:
+          type: integer
+          description: ID do usuário recebedor
+        status:
+          type: string
+          enum: [pendente, autorizada, rejeitada]
+          description: Status da transação
+        created_at:
+          type: string
+          format: date-time
+          description: Data de criação da transação
+    Wallet:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID da carteira
+        user_id:
+          type: integer
+          description: ID do usuário
+        saldo:
+          type: number
+          format: float
+          description: Saldo da carteira
+        created_at:
+          type: string
+          format: date-time
+          description: Data de criação da carteira 

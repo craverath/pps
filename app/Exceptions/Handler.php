@@ -26,5 +26,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (\Illuminate\Database\UniqueConstraintViolationException $e) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Dados duplicados',
+                'details' => $e->getMessage()
+            ], 422);
+        });
     }
 }

@@ -1,0 +1,251 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Pagamentos Simplificada",
+        "description": "API para transferências de dinheiro entre usuários",
+        "contact": {
+            "email": "contato@empresa.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/transfer": {
+            "post": {
+                "tags": [
+                    "Transferências"
+                ],
+                "summary": "Realiza uma transferência entre usuários",
+                "description": "Transfere um valor de um usuário para outro, respeitando as regras de negócio",
+                "operationId": "a768977dcdad59041e2c7fdd8259e553",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "value",
+                                    "payer",
+                                    "payee"
+                                ],
+                                "properties": {
+                                    "value": {
+                                        "description": "Valor a ser transferido",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100
+                                    },
+                                    "payer": {
+                                        "description": "ID do usuário pagador",
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "payee": {
+                                        "description": "ID do usuário recebedor",
+                                        "type": "integer",
+                                        "example": 15
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transferência realizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Transferência realizada com sucesso"
+                                        },
+                                        "transaction_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação ou regra de negócio",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Saldo insuficiente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro interno do servidor"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "post": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Cria um novo usuário",
+                "description": "Cria um novo usuário comum ou lojista",
+                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "document",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nome completo do usuário",
+                                        "type": "string",
+                                        "example": "João Silva"
+                                    },
+                                    "email": {
+                                        "description": "E-mail do usuário",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@email.com"
+                                    },
+                                    "document": {
+                                        "description": "CPF ou CNPJ do usuário",
+                                        "type": "string",
+                                        "example": "12345678900"
+                                    },
+                                    "password": {
+                                        "description": "Senha do usuário",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    },
+                                    "is_merchant": {
+                                        "description": "Indica se o usuário é um lojista",
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário criado com sucesso"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "João Silva"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "joao@email.com"
+                                                },
+                                                "document": {
+                                                    "type": "string",
+                                                    "example": "12345678900"
+                                                },
+                                                "is_merchant": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dados inválidos"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "document": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Transferências",
+            "description": "Transferências"
+        },
+        {
+            "name": "Usuários",
+            "description": "Usuários"
+        }
+    ]
+}

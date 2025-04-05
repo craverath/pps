@@ -1,0 +1,250 @@
+{
+    "info": {
+        "name": "API de Pagamentos Simplificada",
+        "description": "API RESTful para uma plataforma de pagamentos simplificada que permite depósitos e transferências de dinheiro entre usuários",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Usuários",
+            "item": [
+                {
+                    "name": "Criar usuário",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nome_completo\": \"João Silva\",\n    \"cpf_cnpj\": \"12345678900\",\n    \"email\": \"joao@email.com\",\n    \"password\": \"senha123\",\n    \"tipo_usuario\": \"comum\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/users",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Sucesso",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"nome_completo\": \"João Silva\",\n    \"cpf_cnpj\": \"12345678900\",\n    \"email\": \"joao@email.com\",\n    \"password\": \"senha123\",\n    \"tipo_usuario\": \"comum\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/users",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "users"
+                                    ]
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"id\": 1,\n    \"nome_completo\": \"João Silva\",\n    \"cpf_cnpj\": \"12345678900\",\n    \"email\": \"joao@email.com\",\n    \"tipo_usuario\": \"comum\",\n    \"saldo_inicial\": 0.00,\n    \"created_at\": \"2024-04-05T12:00:00.000000Z\"\n}"
+                        },
+                        {
+                            "name": "Erro de validação",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"nome_completo\": \"\",\n    \"cpf_cnpj\": \"123\",\n    \"email\": \"email-invalido\",\n    \"password\": \"123\",\n    \"tipo_usuario\": \"invalido\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/users",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "users"
+                                    ]
+                                }
+                            },
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"error\": true,\n    \"message\": \"Dados inválidos\",\n    \"errors\": {\n        \"nome_completo\": [\"O campo nome completo é obrigatório\"],\n        \"cpf_cnpj\": [\"O campo cpf/cnpj deve ter pelo menos 11 caracteres\"],\n        \"email\": [\"O campo email deve ser um endereço de e-mail válido\"],\n        \"password\": [\"O campo senha deve ter pelo menos 6 caracteres\"],\n        \"tipo_usuario\": [\"O campo tipo de usuário é inválido\"]\n    }\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Transferências",
+            "item": [
+                {
+                    "name": "Realizar transferência",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"value\": 100.00,\n    \"payer\": 1,\n    \"payee\": 2\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/transfer",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transfer"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Sucesso",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"value\": 100.00,\n    \"payer\": 1,\n    \"payee\": 2\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/transfer",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "transfer"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Transferência realizada com sucesso\",\n    \"transaction_id\": 1\n}"
+                        },
+                        {
+                            "name": "Erro de validação",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"value\": 0,\n    \"payer\": 1,\n    \"payee\": 1\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/transfer",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "transfer"
+                                    ]
+                                }
+                            },
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"error\": true,\n    \"message\": \"Dados inválidos\",\n    \"errors\": {\n        \"value\": [\"O valor deve ser maior que 0\"],\n        \"payee\": [\"O recebedor deve ser diferente do pagador\"]\n    }\n}"
+                        },
+                        {
+                            "name": "Erro de negócio",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"value\": 1000.00,\n    \"payer\": 1,\n    \"payee\": 2\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/transfer",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "transfer"
+                                    ]
+                                }
+                            },
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"error\": true,\n    \"message\": \"Saldo insuficiente\"\n}"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
+        }
+    ]
+}
