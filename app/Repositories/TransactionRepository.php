@@ -7,14 +7,14 @@ use App\Models\Transaction;
 
 class TransactionRepository implements ITransactionRepository
 {
-    public function create(array $data): Transaction
-    {
-        return Transaction::create($data);
-    }
-
     public function findById(int $id): ?Transaction
     {
         return Transaction::find($id);
+    }
+
+    public function create(array $data): Transaction
+    {
+        return Transaction::create($data);
     }
 
     public function updateStatus(Transaction $transaction, string $status): bool

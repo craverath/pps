@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{TransactionController, UserController};
+use App\Http\Controllers\{TransactionController, UserController, TransferController};
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/users', [UserController::class, 'store']);
-Route::post('/transfer', [TransactionController::class, 'transfer']);
+Route::post('/transfer', [TransferController::class, 'transfer']);

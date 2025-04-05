@@ -18,4 +18,4 @@ class TransferDTO
             payee: (int) $data['payee']
         );
     }
-} 
+}

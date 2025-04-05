@@ -13,7 +13,7 @@ return new class extends Migration
             $table->decimal('valor', 10, 2);
             $table->foreignId('payer_id')->constrained('users');
             $table->foreignId('payee_id')->constrained('users');
-            $table->enum('status', ['pendente', 'autorizada', 'recusada', 'estornada'])->default('pendente');
+            $table->enum('status', ['pendente', 'autorizada', 'rejeitada'])->default('pendente');
             $table->timestamps();
         });
     }

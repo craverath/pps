@@ -13,7 +13,11 @@ class Transaction extends Model
         'valor',
         'payer_id',
         'payee_id',
-        'status',
+        'status'
+    ];
+
+    protected $casts = [
+        'valor' => 'decimal:2'
     ];
 
     public function payer()

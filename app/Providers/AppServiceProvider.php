@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\{IUserRepository, IWalletRepository, ITransactionRepository};
 use App\Repositories\{UserRepository, WalletRepository, TransactionRepository};
-use App\Services\UserService;
+use App\Services\{UserService, TransactionService};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +20,14 @@ class AppServiceProvider extends ServiceProvider
         
         $this->app->singleton(UserService::class, function ($app) {
             return new UserService(
+                $app->make(IUserRepository::class),
+                $app->make(IWalletRepository::class)
+            );
+        });
+
+        $this->app->singleton(TransactionService::class, function ($app) {
+            return new TransactionService(
+                $app->make(ITransactionRepository::class),
                 $app->make(IUserRepository::class),
                 $app->make(IWalletRepository::class)
             );
